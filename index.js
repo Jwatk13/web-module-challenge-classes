@@ -28,7 +28,8 @@ class Airplane {
 // 👇 COMPLETE YOUR WORK BELOW 👇
 */
 
-/* ❗❗ NOTE: PLEASE READ TASK INSTRUCTIONS CAREFULLY TO KNOW WHEN TO USE OBJECT AS CONSTRUCTOR ARGUMENT. TESTS WILL NOT PASS IF USED WHEN NOT INSTRUCTED. ❗❗ */
+/* ❗❗ NOTE: PLEASE READ TASK INSTRUCTIONS CAREFULLY TO KNOW WHEN TO USE OBJECT AS CONSTRUCTOR ARGUMENT. 
+TESTS WILL NOT PASS IF USED WHEN NOT INSTRUCTED. ❗❗ */
 
 /*
   TASK 1
@@ -44,9 +45,25 @@ class Airplane {
 */
 
 class Person {
-  
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+    this.stomach = [];
+  }
+  eat(string) {
+    if (this.stomach.length < 10) {
+     return this.stomach.push(string);
+   } else {
+     return 'Full';
+   }
+  }
+  poop() {
+    return this.stomach.splice(0);
+  }
+  toString() {
+    return `${this.name}, ${this.age}`;
+  }
 }
-
 /*
   TASK 2
     - Write a Car class whose constructor initializes `model` and `milesPerGallon`, from 2 arguments.
@@ -62,7 +79,26 @@ class Person {
 */
 
 class Car {
-  
+  constructor(model, milesPerGallon) {
+    this.model = model;
+    this.milesPerGallon = milesPerGallon;
+    this.tank = 0;
+    this.odometer = 0;
+  }
+  fill(gallons) {
+    this.tank = this.tank + gallons;
+  }
+  drive(distance) { 
+    const maxDistance = this.tank * this.milesPerGallon;
+    if (distance < maxDistance) {
+      this.odometer = this.odometer + distance;
+      this.tank = this.tank - (distance / this.milesPerGallon);
+    } else {
+      this.odometer = this.odometer + maxDistance;
+      this.tank = 0;
+      return `I ran out of fuel at ${this.odometer} miles!`
+    }
+  }
 }
 
 /*
@@ -79,7 +115,14 @@ class Car {
 */
 
 class Lambdasian {
-  
+  constructor(props) {
+    this.name = props.name;
+    this.age = props.age;
+    this.location = props.location;
+  }
+  speak() {
+    return `Hello my name is ${this.name}, I am from ${this.location}.`
+  }
 }
 
 /*
@@ -93,14 +136,28 @@ class Lambdasian {
     - The constructor calls the parent constructor passing it what it needs.
     - The constructor should also initialize `specialty`, `favLanguage` and `catchPhrase` properties on the instance.
     - Instructor instances have the following methods:
-        + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
-        + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
+        + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}'
+         where subject is the param passed in.
+        + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives 
+        a perfect score on {subject}'
 */
 
-class Instructor {
-
+class Instructor extends Lambdasian {
+  constructor(props) {
+    super(props);
+    this.specialty = props.specialty;
+    this.favLanguage = props.favLanguage;
+    this.catchPhrase = props.catchPhrase;
+  }
+  demo(subject){
+    return `Today we are learning about ${subject}`;
+  }
+  grade(studentName, subjectName) {
+    return `${studentName.name} receives a perfect score on ${subjectName}`
+  }
 }
-
+const instructor1 = new Instructor({name: 'name', age: 25, location: 'Brunswick',specialty: 'redux', favLanguage: 'react', catchPhrase: "Don't forget the homies."});
+// console.log(instructor1.grade('Billy', 'Math'));
 /*
   TASK 5
     - Write a Student class extending Lambdasian.
@@ -112,15 +169,30 @@ class Instructor {
     - The constructor calls the parent constructor passing to it what it needs.
     - The constructor should also initialize `previousBackground`, `className` and `favSubjects` properties on the instance.
     - Student instances have the following methods:
-        + `listSubjects` a method that returns all of the student's favSubjects in a single string: `Loving HTML, CSS, JS!`.
-        + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
+        + `listSubjects` a method that returns all of the student's favSubjects in a single string: 
+        `Loving HTML, CSS, JS!`.
+        + `PRAssignment` a method that receives a subject as an argument and returns
+         `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
 
-class Student {
-   
+class Student extends Lambdasian {
+  constructor(props) {
+    super(props);
+    this.previousBackground = props.previousBackground;
+    this.className = props.className;
+    this.favSubjects = props.favSubjects;
+  }
+  listSubjects(){
+    return this.favSubjects.toString();
+  }
+  PRAssignment(studentSubject){
+    return `${this.name} has submitted a PR for ${studentSubject}`;
+  }
+  sprintChallenge(studentChallengeSubject){
+    return `${this.name} has begun sprint challenge on ${studentChallengeSubject}`;
+  }
 }
-
 /*
   TASK 6
     - Write a ProjectManager class extending Instructor.
@@ -131,12 +203,23 @@ class Student {
     - Its constructor calls the parent constructor passing to it what it needs.
     - The constructor should also initialize `gradClassName` and `favInstructor` properties on the instance.
     - ProjectManager instances have the following methods:
-        + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
+        + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel 
+        standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
 
-class ProjectManager {
-   
+class ProjectManager extends Instructor {
+   constructor(props) {
+     super(props);
+     this.gradClassName = props.gradClassName;
+     this.favInstructor = props.favInstructor;
+   }
+   standUp(channel){
+    return `${this.name} announces to ${channel}, @channel standy times!`;
+   }
+   debugsCode(student, debugsSubject){
+    return `${this.name} debugs ${student.name}'s code on ${debugsSubject}`;
+   }
 }
 
 /*
